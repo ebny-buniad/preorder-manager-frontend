@@ -94,6 +94,29 @@ export const preordersService = {
                 },
             };
         }
+    },
+
+    // ** delete preorder
+    deletePreorder: async (id: string) => {
+        try {
+            const url = new URL(`${API_URL}/preorder/${id}`);
+            const res = await fetch(url.toString(), {
+                method: "DELETE",
+                credentials: "include",
+                cache: "no-store"
+            });
+
+            const data = await res.json();
+
+            return {
+                success: res.ok,
+                data: res.ok ? data : null,
+                error: res.ok ? null : { message: data.message },
+            };
+        }
+        catch (err: any) {
+            return { data: null, error: { message: err.message } };
+        }
     }
 
 }

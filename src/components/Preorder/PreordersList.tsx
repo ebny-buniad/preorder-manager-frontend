@@ -17,6 +17,9 @@ import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import PreordersPagination from "./PreorderPagination";
+import { preordersService } from "@/app/services/preorders.service";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface Preorder {
     id: string;
@@ -34,17 +37,30 @@ interface Props {
 }
 
 export default function PreordersList({
-    preorderData, metaData
+    preorderData,
+    metaData,
 }: Props) {
+    const [preorders, setPreorders] = useState(() => preorderData);
 
+    const deletePreorder = async (id: string) => {
+        try {
+            const res = await preordersService.deletePreorder(id);
 
-    console.log(metaData)
+            if (res.success) {
+                setPreorders((prev) =>
+                    prev.filter((item) => item.id !== id)
+                );
 
-
-    // Delete preorder function 
-    const deletePreorder = (id: string) => {
-
-    }
+                toast.success("Preorder deleted successfully");
+            } else {
+                toast.error(
+                    res.error?.message || "Failed to delete preorder"
+                );
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    };
 
     return (
         <div className="overflow-hidden rounded-xl border bg-background mt-5">
@@ -70,7 +86,7 @@ export default function PreordersList({
                 </TableHeader>
 
                 <TableBody>
-                    {preorderData?.map((item) => (
+                    {preorders?.map((item) => (
                         <TableRow key={item.id}>
                             <TableCell>
                                 <Checkbox />
@@ -114,7 +130,7 @@ export default function PreordersList({
                                     <Button size="icon" variant="outline" >
                                         <Pencil className="h-4 w-4" />
                                     </Button>
-                                    <Button size="icon" variant="outline" >
+                                    <Button onClick={() => { deletePreorder(item?.id) }} size="icon" variant="outline" >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </div>
