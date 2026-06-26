@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ICreatePreorder } from "@/interface/preorders.interface";
+import { ICreatePreorder, IUpdatePreorder } from "@/interface/preorders.interface";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -96,6 +96,30 @@ export const preordersService = {
         }
     },
 
+    // ** get preorder by slug
+    getPreorderBySlug: async (slug: string) => {
+        try {
+            const url = new URL(`${API_URL}/preorder/${slug}`);
+            const res = await fetch(url.toString(), {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cache: "no-store",
+            });
+            const data = await res.json();
+            return {
+                success: res.ok,
+                data: res.ok ? data : null,
+                error: res.ok ? null : { message: data.message || "Failed to fetch blog" },
+            };
+        }
+        catch (err) {
+            return { data: null, error: { message: "Something Went Wrong" } };
+        }
+    },
+
+    // ** Update status
     updateStatus: async (
         id: string,
         status: string
@@ -113,6 +137,32 @@ export const preordersService = {
 
         return await res.json();
     },
+
+    // ** update preorder
+    updatePreorder: async (payload: IUpdatePreorder, id: string) => {
+        try {
+            const url = new URL(`${API_URL}/preorder/${id}`);
+            const res = await fetch(url.toString(), {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                cache: "no-cache",
+                body: JSON.stringify(payload),
+            })
+            const data = await res.json();
+            return {
+                success: res.ok,
+                data: res.ok ? data : null,
+                error: res.ok ? null : { message: data.message || "Failed to update brand" },
+            };
+        }
+        catch (err) {
+            return { data: null, error: { message: "Something Went Wrong" } };
+        }
+    },
+
 
     // ** delete preorder
     deletePreorder: async (id: string) => {

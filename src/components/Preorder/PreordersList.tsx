@@ -21,6 +21,7 @@ import { preordersService } from "@/app/services/preorders.service";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Preorder {
     id: string;
@@ -30,6 +31,7 @@ interface Preorder {
     startsAt: string;
     endsAt: string | null;
     status: string;
+    slug: string
 }
 
 interface Props {
@@ -172,12 +174,14 @@ export default function PreordersList({
 
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        <Button
-                                            size="icon"
-                                            variant="outline"
-                                        >
-                                            <Pencil className="h-4 w-4" />
-                                        </Button>
+                                        <Link href={`/update-preorder/${item.slug}`}>
+                                            <Button
+                                                size="icon"
+                                                variant="outline"
+                                            >
+                                                <Pencil className="h-4 w-4" />
+                                            </Button>
+                                        </Link>
 
                                         <Button
                                             onClick={() =>
