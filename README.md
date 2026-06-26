@@ -1,36 +1,190 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Preorder Manager Frontend
 
-## Getting Started
+A modern frontend application for managing preorders, built with Next.js, TypeScript, Tailwind CSS, Shadcn UI, TanStack Form, and Sonner.
 
-First, run the development server:
+---
+
+## Tech Stack
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* Shadcn UI
+* TanStack Form
+* Sonner
+* Lucide React
+* pnpm
+
+---
+
+## Prerequisites
+
+Make sure the following are installed:
+
+* Node.js v22.17.1 or later
+* pnpm
+
+Verify installation:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
+pnpm -v
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Clone the Repository
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone https://github.com/ebny-buniad/preorder-manager-frontend.git
+cd preorder-manager-frontend
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Install Dependencies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create a `.env.local` file in the root directory:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+```
+
+---
+
+## Backend Setup
+
+This frontend requires the backend API to be running.
+
+Start the backend application first:
+
+```bash
+cd preorder-manager-backend
+
+pnpm install
+
+pnpm dev
+```
+
+The backend should be available at:
+
+```txt
+http://localhost:5000
+```
+
+---
+
+## Run the Frontend
+
+Development mode:
+
+```bash
+pnpm dev
+```
+
+The application will start on:
+
+```txt
+http://localhost:3000
+```
+
+---
+
+## Build for Production
+
+Build the application:
+
+```bash
+pnpm build
+```
+
+Start the production build:
+
+```bash
+pnpm start
+```
+
+---
+
+## Available Scripts
+
+Start development server:
+
+```bash
+pnpm dev
+```
+
+Build the application:
+
+```bash
+pnpm build
+```
+
+Start production build:
+
+```bash
+pnpm start
+```
+
+Run ESLint:
+
+```bash
+pnpm lint
+```
+
+---
+
+## Features
+
+### Preorder Management
+
+* Create Preorder
+* Update Preorder
+* Delete Preorder
+* Toggle Status (Active / Inactive)
+
+### Filtering
+
+* View All Preorders
+* View Active Preorders
+* View Inactive Preorders
+
+### Sorting
+
+* Name
+* Created Date
+* Start Date
+* End Date
+* Ascending / Descending
+
+### Pagination
+
+* Server-side Pagination
+
+### Validation & UX
+
+* Zod Validation
+* TanStack Form
+* Toast Notifications
+* Responsive UI
+
+---
+
+## Notes for Reviewers
+
+1. Clone both frontend and backend repositories.
+2. Install dependencies using `pnpm install`.
+3. Create the `.env.local` file.
+4. Start the backend server.
+5. Start the frontend server.
+6. Open `http://localhost:3000` in your browser.
+
+The frontend communicates with the backend REST API and requires the backend service to be running locally.

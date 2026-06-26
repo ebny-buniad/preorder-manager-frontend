@@ -213,9 +213,9 @@ export default function PreordersList({
             {/* Footer */}
             <div className="flex items-center justify-center gap-4 border-t p-4">
                 <PreordersPagination
-                    page={metaData.page}
+                    page={metaData?.page}
                     limit={metaData?.limit}
-                    total={metaData.totalPage}
+                    total={metaData?.totalPage}
                 />
             </div>
         </div>
