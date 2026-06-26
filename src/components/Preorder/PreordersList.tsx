@@ -18,8 +18,9 @@ import { Button } from "../ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import PreordersPagination from "./PreorderPagination";
 import { preordersService } from "@/app/services/preorders.service";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Preorder {
     id: string;
@@ -40,8 +41,18 @@ export default function PreordersList({
     preorderData,
     metaData,
 }: Props) {
-    const [preorders, setPreorders] = useState(() => preorderData);
 
+    const router = useRouter();
+
+    const [preorders, setPreorders] = useState(preorderData);
+    const [loadingId, setLoadingId] = useState<string | null>(null);
+
+    useEffect(() => {
+        setPreorders(preorderData);
+    }, [preorderData]);
+
+
+    // ** Delete provider
     const deletePreorder = async (id: string) => {
         try {
             const res = await preordersService.deletePreorder(id);
@@ -59,6 +70,37 @@ export default function PreordersList({
             }
         } catch (error) {
             toast.error("Something went wrong");
+        }
+    };
+
+    // ** Update status
+    const handleStatusChange = async (
+        id: string,
+        checked: boolean
+    ) => {
+        try {
+            setLoadingId(id);
+
+            const status = checked
+                ? "Active"
+                : "Inactive";
+
+            await preordersService.updateStatus(
+                id,
+                status
+            );
+
+            toast.success(
+                `Status updated to ${status}`
+            );
+
+            router.refresh();
+        } catch {
+            toast.error(
+                "Failed to update status"
+            );
+        } finally {
+            setLoadingId(null);
         }
     };
 
@@ -86,66 +128,83 @@ export default function PreordersList({
                 </TableHeader>
 
                 <TableBody>
-                    {preorders?.map((item) => (
-                        <TableRow key={item.id}>
-                            <TableCell>
-                                <Checkbox />
-                            </TableCell>
+                    {preorders?.length > 0 ? (
+                        preorders.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell>
+                                    <Checkbox />
+                                </TableCell>
 
-                            <TableCell className="font-medium">
-                                {item.name}
-                            </TableCell>
+                                <TableCell className="font-medium">
+                                    {item.name}
+                                </TableCell>
 
-                            <TableCell>
-                                {item.products}
-                            </TableCell>
+                                <TableCell>
+                                    {item.products}
+                                </TableCell>
 
-                            <TableCell>
-                                {item.preorderWhen}
-                            </TableCell>
+                                <TableCell>
+                                    {item.preorderWhen}
+                                </TableCell>
 
-                            <TableCell>
-                                {new Date(
-                                    item.startsAt
-                                ).toLocaleString()}
-                            </TableCell>
+                                <TableCell>
+                                    {new Date(item.startsAt).toLocaleString()}
+                                </TableCell>
 
-                            <TableCell>
-                                {item.endsAt
-                                    ? new Date(
-                                        item.endsAt
-                                    ).toLocaleString()
-                                    : "-"}
-                            </TableCell>
+                                <TableCell>
+                                    {item.endsAt
+                                        ? new Date(item.endsAt).toLocaleString()
+                                        : "-"}
+                                </TableCell>
 
-                            <TableCell>
-                                <Switch
-                                    checked={
-                                        item.status === "Active"
-                                    }
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex items-center gap-2">
-                                    <Button size="icon" variant="outline" >
-                                        <Pencil className="h-4 w-4" />
-                                    </Button>
-                                    <Button onClick={() => { deletePreorder(item?.id) }} size="icon" variant="outline" >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </div>
+                                <TableCell>
+                                    <Switch
+                                        checked={item.status === "Active"}
+                                        disabled={loadingId === item.id}
+                                        onCheckedChange={(checked) =>
+                                            handleStatusChange(
+                                                item.id,
+                                                checked
+                                            )
+                                        }
+                                    />
+                                </TableCell>
+
+                                <TableCell>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            size="icon"
+                                            variant="outline"
+                                        >
+                                            <Pencil className="h-4 w-4" />
+                                        </Button>
+
+                                        <Button
+                                            onClick={() =>
+                                                deletePreorder(item.id)
+                                            }
+                                            size="icon"
+                                            variant="outline"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell
+                                colSpan={8}
+                                className="h-24 text-center text-muted-foreground text-red-400"
+                            >
+                                No preorders data!
                             </TableCell>
                         </TableRow>
-                    ))}
+                    )}
                 </TableBody>
 
             </Table>
-
-            {
-                preorderData.length === 0 && <>
-                    <p className="text-center py-10 text-red-400 text-xs">No preorders data!</p>
-                </>
-            }
 
             {/* Footer */}
             <div className="flex items-center justify-center gap-4 border-t p-4">

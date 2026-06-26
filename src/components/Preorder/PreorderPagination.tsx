@@ -20,8 +20,6 @@ export default function PreordersPagination({
 
     const totalPages = Math.ceil(total / limit);
 
-    console.log(total)
-
     const start = (page - 1) * limit + 1;
     const end = Math.min(page * limit, total);
 

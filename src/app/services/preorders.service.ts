@@ -96,6 +96,24 @@ export const preordersService = {
         }
     },
 
+    updateStatus: async (
+        id: string,
+        status: string
+    ) => {
+        const res = await fetch(
+            `${API_URL}/preorder/${id}/status`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status }),
+            }
+        );
+
+        return await res.json();
+    },
+
     // ** delete preorder
     deletePreorder: async (id: string) => {
         try {
