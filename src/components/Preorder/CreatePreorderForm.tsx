@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "@tanstack/react-form";
@@ -20,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { preordersService } from "@/app/services/preorders.service";
 
 type PreorderWhen =
   | "regardless-of-stock"
@@ -47,7 +49,10 @@ const preorderSchema = z.object({
 
   endsAt: z.string(),
 
-  status: z.boolean(),
+  status: z.enum([
+    "Active",
+    "Inactive",
+  ]),
 });
 
 export default function CreatePreorderForm() {
@@ -60,7 +65,7 @@ export default function CreatePreorderForm() {
         | "out-of-stock",
       startsAt: "",
       endsAt: "",
-      status: true,
+      status: "",
     },
 
     validators: {
@@ -68,13 +73,32 @@ export default function CreatePreorderForm() {
     },
 
     onSubmit: async ({ value }) => {
-      toast.success("Preorder Created");
 
-      console.log(value);
+      const preorderData = {
+        name: value?.name,
+        products: value?.products,
+        preorderWhen: value?.preorderWhen,
+        startsAt: new Date(value.startsAt).toISOString(),
+        endsAt: new Date(value.startsAt).toISOString(),
+        status: value?.status
+      }
 
-      /*
-      await createPreorder(value)
-      */
+      try {
+        const res = await preordersService.createPreorders(preorderData);
+
+        console.log(res)
+
+        if (res?.data?.success === true) {
+          toast.success("Preorder Created");
+        }
+        else if (!res?.data?.success === true) {
+          toast.error("Something went wrong");
+        }
+      } catch (err: any) {
+        toast.error(
+          "Something went wrong"
+        );
+      }
     },
   });
 
@@ -332,19 +356,14 @@ export default function CreatePreorderForm() {
             <div className="col-span-8">
               <div className="flex items-center gap-3">
                 <Switch
-                  checked={
-                    field.state.value
-                  }
-                  onCheckedChange={
-                    field.handleChange
+                  checked={field.state.value === "Active"}
+                  onCheckedChange={(checked) =>
+                    field.handleChange(
+                      checked ? "Active" : "Inactive"
+                    )
                   }
                 />
-
-                <span>
-                  {field.state.value
-                    ? "Active"
-                    : "Inactive"}
-                </span>
+                <span>{field.state.value}</span>
               </div>
             </div>
           </div>
