@@ -79,14 +79,14 @@ export default function CreatePreorderForm() {
         products: value?.products,
         preorderWhen: value?.preorderWhen,
         startsAt: new Date(value.startsAt).toISOString(),
-        endsAt: new Date(value.startsAt).toISOString(),
+        endsAt: value.endsAt
+          ? new Date(value.endsAt).toISOString()
+          : null,
         status: value?.status
       }
 
       try {
         const res = await preordersService.createPreorders(preorderData);
-
-        console.log(res)
 
         if (res?.data?.success === true) {
           toast.success("Preorder Created");

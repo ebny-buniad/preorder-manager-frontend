@@ -21,13 +21,13 @@ const data = {
       url: "#",
       items: [
         {
-          title: "Create Preorder",
-          url: "create-preorder",
+          title: "Preorders",
+          url: "/preorders",
         },
         {
-          title: "Project Structure",
-          url: "#",
-        },
+          title: "Create new Preorder",
+          url: "create-preorder",
+        }
       ],
     }
   ]
@@ -37,7 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-       <h3 className="font-bold text-2xl">🛒 Preorders</h3>
+        <h3 className="font-bold text-2xl">🛒 Preorders</h3>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}

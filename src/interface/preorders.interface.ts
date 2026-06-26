@@ -3,6 +3,6 @@ export interface ICreatePreorder {
     products: number,
     preorderWhen: string;
     startsAt: string;
-    endsAt?: string;
+    endsAt?: string | null;
     status: string;
 }
