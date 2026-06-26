@@ -24,7 +24,8 @@ export default async function Preorders({
             sortOrder: params.sortOrder,
         });
 
-    const data = preorderData?.data?.data?.data || []
+    const data = preorderData?.data?.data?.data || [];
+    const metaData = preorderData?.data?.data?.meta;
 
     return (
         <div>
@@ -34,7 +35,7 @@ export default async function Preorders({
                     <Button>Create Preorder +</Button>
                 </Link>
             </div>
-            <PreordersList preorderData={data}></PreordersList>
+            <PreordersList preorderData={data} metaData={metaData}></PreordersList>
         </div>
     )
 }

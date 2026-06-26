@@ -16,6 +16,7 @@ import PreorderFilters from "./PreorderFilters";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
 import { Pencil, Trash2 } from "lucide-react";
+import PreordersPagination from "./PreorderPagination";
 
 interface Preorder {
     id: string;
@@ -29,12 +30,21 @@ interface Preorder {
 
 interface Props {
     preorderData: Preorder[];
+    metaData: any
 }
 
 export default function PreordersList({
-    preorderData,
+    preorderData, metaData
 }: Props) {
 
+
+    console.log(metaData)
+
+
+    // Delete preorder function 
+    const deletePreorder = (id: string) => {
+
+    }
 
     return (
         <div className="overflow-hidden rounded-xl border bg-background mt-5">
@@ -123,7 +133,11 @@ export default function PreordersList({
 
             {/* Footer */}
             <div className="flex items-center justify-center gap-4 border-t p-4">
-
+                <PreordersPagination
+                    page={metaData.page}
+                    limit={metaData?.limit}
+                    total={metaData.totalPage}
+                />
             </div>
         </div>
     );
