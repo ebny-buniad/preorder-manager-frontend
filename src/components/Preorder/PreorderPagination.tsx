@@ -82,9 +82,6 @@ export default function PreordersPagination({
 
       <Button
         variant="outline"
-        disabled={
-          currentPage >= totalPages
-        }
         onClick={() =>
           updatePage(currentPage + 1)
         }
